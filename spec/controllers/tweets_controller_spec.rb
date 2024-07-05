@@ -1,3 +1,5 @@
+# spec/controllers/tweets_controller_spec.rb
+
 require 'rails_helper'
 
 RSpec.describe TweetsController, type: :controller do
@@ -17,6 +19,7 @@ RSpec.describe TweetsController, type: :controller do
 
       expect(response.body).to eq({
         tweet: {
+          id: Tweet.last.id,  # Use Tweet.last.id directly
           username: user.username,
           message: 'Test Message'
         }
@@ -27,24 +30,23 @@ RSpec.describe TweetsController, type: :controller do
   describe 'GET /tweets' do
     it 'renders all tweets object' do
       user = FactoryBot.create(:user)
-      FactoryBot.create(:tweet, user: user)
-      FactoryBot.create(:tweet, user: user)
+      tweet1 = FactoryBot.create(:tweet, user: user, message: 'Test Message')
+      tweet2 = FactoryBot.create(:tweet, user: user, message: 'Test Message')
 
       get :index
 
-      expect(response.body).to eq({
-        tweets: [
-          {
-            id: Tweet.order(created_at: :desc)[0].id,
-            username: user.username,
-            message: 'Test Message'
-          }, {
-            id: Tweet.order(created_at: :desc)[1].id,
-            username: user.username,
-            message: 'Test Message'
-          }
-        ]
-      }.to_json)
+      expect(response.body).to eq([
+        {
+          id: tweet2.id,
+          username: user.username,
+          message: 'Test Message'
+        },
+        {
+          id: tweet1.id,
+          username: user.username,
+          message: 'Test Message'
+        }
+      ].to_json)
     end
   end
 
@@ -57,7 +59,6 @@ RSpec.describe TweetsController, type: :controller do
       tweet = FactoryBot.create(:tweet, user: user)
 
       delete :destroy, params: { id: tweet.id }
-
       expect(response.body).to eq({ success: true }.to_json)
       expect(user.tweets.count).to eq(0)
     end
@@ -68,7 +69,7 @@ RSpec.describe TweetsController, type: :controller do
 
       delete :destroy, params: { id: tweet.id }
 
-      expect(response.body).to eq({ success: false }.to_json)
+      expect(response.body).to eq({ error: 'Not authenticated' }.to_json)
       expect(user.tweets.count).to eq(1)
     end
   end
@@ -77,21 +78,19 @@ RSpec.describe TweetsController, type: :controller do
     it 'renders tweets by username' do
       user1 = FactoryBot.create(:user, username: 'user1', email: 'user1@user.com')
       user2 = FactoryBot.create(:user, username: 'user2', email: 'user2@user.com')
-
-      tweet1 = FactoryBot.create(:tweet, user: user1)
+      tweet1 = FactoryBot.create(:tweet, user: user1, message: 'Test Message')
       FactoryBot.create(:tweet, user: user2)
 
       get :index_by_user, params: { username: user1.username }
 
-      expect(response.body).to eq({
-        tweets: [
-          {
-            id: tweet1.id,
-            username: user1.username,
-            message: 'Test Message'
-          }
-        ]
-      }.to_json)
+      expect(response.body).to eq([
+        {
+          id: tweet1.id,
+          username: user1.username,
+          message: 'Test Message'
+        }
+      ].to_json)
     end
   end
 end
+

@@ -16,24 +16,20 @@ gem 'uglifier', '~> 4.2.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails', '~> 4.4'
-# Use CoffeeScript for .coffee assets and views
-# gem 'coffee-rails', '~> 5.0'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
+# Use Turbolinks to speed up page transitions
 gem 'turbolinks', '~> 5.2.1'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.11'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
-# Use ActiveModel has_secure_password
+# Use bcrypt to hash passwords securely
 gem 'bcrypt', '~> 3.1'
-# AWS S3
+# AWS SDK for S3 storage
 gem 'aws-sdk-s3', '~> 1.114'
-# Webrick
+# Webrick is a simple Ruby web server
 gem 'webrick', '~> 1.7'
-# Mail gem
+# Mail gem for email functionality
 gem 'mail', '>= 2.8.0.rc1'
 
-# Use ActiveStorage variant
+# Use Active Storage variant
 # gem 'mini_magick', '~> 4.8'
 
 # Use Capistrano for deployment
@@ -45,7 +41,6 @@ gem 'bootsnap', '>= 1.13', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', '~> 11.1.3', platforms: %i[mri mingw x64_mingw]
-  # Added by Altcademy.com
   gem 'awesome_print', '~> 1.9'
   gem 'dotenv-rails', '~> 2.8'
   gem 'factory_bot_rails', '~> 6.2'
@@ -56,14 +51,13 @@ group :development, :test do
 
   # Use sqlite3 as the database for Active Record in development and test environments
   gem 'sqlite3', '~> 1.5', '>= 1.5.1'
-
 end
 
 group :development do
-  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
+  # Access an interactive console on exception pages or by calling 'console' anywhere
   gem 'listen', '~> 3.7.1'
   gem 'web-console', '>= 4.2'
-  # Spring speeds up development by keeping your application running in the background.
+  # Spring speeds up development by keeping your application running in the background
   gem 'spring', '< 3.0'
   gem 'spring-watcher-listen', '~> 2.0.1'
 end
@@ -75,4 +69,8 @@ end
 
 # Add nio4r gem to ensure compatibility
 gem 'nio4r', '~> 2.5.9'
+
+# Gem for controller testing (needed for assigns method)
+gem 'rails-controller-testing'
+
 
